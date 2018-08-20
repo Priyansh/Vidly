@@ -1,4 +1,5 @@
-﻿@model VidlyMVC.ViewModels.RandomMovieViewModel
+﻿@using System.Web.UI.WebControls
+@model VidlyMVC.ViewModels.RandomMovieViewModel
 @{
     ViewBag.Title = "Customers";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,4 +25,88 @@
     
 
 </div>
+<hr/>
+<form>
+    <div class="form-group">
+        @Html.Label("Customer Name")
+        @Html.TextBox("txtCustName", null, new { @class = "form-control", @PlaceHolder = "Please Enter Name"})
+    </div>
+    <div class="form-group">
+        @Html.Label("Customer Address")
+        @Html.TextBox("txtCustAddress", null, new { @class = "form-control", @PlaceHolder = "Please Enter Address" })
+    </div>
+    <button id="btnSave" class="btn btn-primary">Save</button>
+</form>
+<hr/>
+<table id="tblCustomers" class="table table-bordered table-striped table-hover table-responsive">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Address</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+    
+</table>
 
+@section scripts
+{
+    <script type="text/javascript">
+        $(function() {
+            //DisplayData();
+            DisplayCustomer();
+            //Create records on button click
+            $("#btnSave").click(function() {
+                //make customer data
+                var cust = {};
+                cust.Name = $("#txtCustName").val();
+                cust.Address = $("#txtCustAddress").val();
+                //ajax call
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CreateCustomer")',
+                    data: '{cust: ' + JSON.stringify(cust) + '}',
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",  
+                    success: function () {  
+                        alert("Data has been added successfully.");
+                        $("#txtCustName").val("");
+                        $("#txtCustAddress").val("");
+                        DisplayCustomer();
+                    },  
+                    error: function () {  
+                        alert("Error while inserting data");  
+                    }  
+                });
+                return false;
+            });
+        });
+
+            //Display Record Function
+        function DisplayCustomer() {
+            $("#tblCustomers tbody tr").remove();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetCustomers")',
+                dataType: "json",
+                data: { Id: '' },
+                success: function(data) {
+                    var items = '';
+                    $.each(data, function(i, item) {
+                        var rows = "<tr>"
+                            + "<td>" + item.Name + "</td>"
+                            + "<td>" + item.Address + "</td>"
+                            + "</tr>";
+                        $("#tblCustomers tbody").append(rows);
+                    });
+                },
+                error: function (ex) {  
+                    var r = jQuery.parseJSON(response.responseText);  
+                    alert("Message: " + r.Message);  
+                    alert("StackTrace: " + r.StackTrace);  
+                    alert("ExceptionType: " + r.ExceptionType);  
+                }
+            });
+        }
+    </script>
+}

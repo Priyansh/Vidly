@@ -17,8 +17,8 @@ namespace VidlyMVC.Controllers
         {
             lstCustomers = new List<Customer>
             {
-                new Customer {Id = 1, Name = "John Dow"},
-                new Customer {Id = 2, Name = "Priyansh Shah"}
+                new Customer {Id = 1, Name = "John Dow", Address = "Harrison Garden"},
+                new Customer {Id = 2, Name = "Priyansh Shah", Address = "Cole St"}
             };
         }
 
@@ -30,7 +30,7 @@ namespace VidlyMVC.Controllers
             return Json(new {Message = "Success", JsonRequestBehavior.AllowGet});
         }
 
-        public JsonResult GetCustomers()
+        public JsonResult GetCustomers(string Id)
         {
             List<Customer> lstGetCustomers = new List<Customer>();
             lstGetCustomers = _CustomerContext.dbSetCustomers.ToList();
@@ -43,8 +43,10 @@ namespace VidlyMVC.Controllers
             
             var viewCustomers = new RandomMovieViewModel
             {
-                lstCustomers = this.lstCustomers
+                lstCustomers = this.lstCustomers,
+                customerInfo = new Customer { Name = lstCustomers[0].Name, Address = lstCustomers[0].Address}
             };
+
             return View(viewCustomers);
         }
 
