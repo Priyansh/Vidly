@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
 namespace VidlyMVC.Models
 {
-    public class Customer : DbContext
+    public class Customer
     {
+        [Key]
         public int Id { get; set; }
+        [Required]
         public string Name{ get; set; }
+        [Required]
+        public string Address { get; set; }
     }
 }

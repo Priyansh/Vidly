@@ -5,14 +5,14 @@ namespace VidlyMVC.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<VidlyMVC.Models.Customer>
+    internal sealed class Configuration : DbMigrationsConfiguration<VidlyMVC.Models.CustomerContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(VidlyMVC.Models.Customer context)
+        protected override void Seed(VidlyMVC.Models.CustomerContext context)
         {
             //  This method will be called after migrating to the latest version.
 

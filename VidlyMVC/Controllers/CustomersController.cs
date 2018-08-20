@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 using VidlyMVC.ViewModels;
 using VidlyMVC.Models;
 
@@ -12,7 +12,7 @@ namespace VidlyMVC.Controllers
     {
         // GET: Customers
         private List<Customer> lstCustomers;
-
+        private CustomerContext _CustomerContext = new CustomerContext();
         public CustomersController()
         {
             lstCustomers = new List<Customer>
@@ -22,7 +22,22 @@ namespace VidlyMVC.Controllers
             };
         }
 
-        [Route("customers")]
+        [HttpPost]
+        public JsonResult CreateCustomer(Customer cust)
+        {
+            _CustomerContext.dbSetCustomers.Add(cust);
+            _CustomerContext.SaveChangesAsync();
+            return Json(new {Message = "Success", JsonRequestBehavior.AllowGet});
+        }
+
+        public JsonResult GetCustomers()
+        {
+            List<Customer> lstGetCustomers = new List<Customer>();
+            lstGetCustomers = _CustomerContext.dbSetCustomers.ToList();
+            return Json(lstGetCustomers, JsonRequestBehavior.AllowGet);
+        }
+
+        //[Route("customers")]
         public ActionResult Index()
         {
             
@@ -33,7 +48,7 @@ namespace VidlyMVC.Controllers
             return View(viewCustomers);
         }
 
-        [Route("customers/details/{id}")]
+        //[Route("customers/details/{id}")]
         public ActionResult Details(int? id)
         {
             var lstCustomerById = lstCustomers.SingleOrDefault(cust => cust.Id == id); //Return Single Customer
