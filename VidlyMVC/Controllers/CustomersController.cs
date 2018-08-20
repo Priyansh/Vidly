@@ -34,11 +34,13 @@ namespace VidlyMVC.Controllers
         }
 
         [Route("customers/details/{id}")]
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
-            if (id > lstCustomers.Count)
-                return Content("No matching record found");
-            return Content(lstCustomers[id - 1].Name);
+            var lstCustomerById = lstCustomers.SingleOrDefault(cust => cust.Id == id); //Return Single Customer
+            if (lstCustomerById is null)
+                return HttpNotFound();
+            return View(lstCustomerById);
+
         }
     }
 }
