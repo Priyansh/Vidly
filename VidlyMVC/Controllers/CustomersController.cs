@@ -40,19 +40,23 @@ namespace VidlyMVC.Controllers
         //[Route("customers")]
         public ActionResult Index()
         {
-
-            var viewCustomers = new RandomMovieViewModel
+            RandomMovieViewModel viewCustomers = null;
+            try
             {
-                //lstCustomers = this.lstCustomers,
-                lstCustomers = _CustomerContext.dbSetCustomers.ToList(),
-                //customerInfo = new Customer { Name = lstCustomers[0].Name, Address = lstCustomers[0].Address}
-            };
-            
-
+                viewCustomers = new RandomMovieViewModel
+                {
+                    //lstCustomers = this.lstCustomers,
+                    lstCustomers = _CustomerContext.dbSetCustomers.ToList(),
+                    //customerInfo = new Customer { Name = lstCustomers[0].Name, Address = lstCustomers[0].Address}
+                };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return RedirectToAction("Index", "Home");
+            }
             return View(viewCustomers);
         }
-
-        
 
         //[Route("customers/details/{id}")]
         public ActionResult Details(int? id)
@@ -69,7 +73,11 @@ namespace VidlyMVC.Controllers
             var editCustomer = _CustomerContext.dbSetCustomers.SingleOrDefault(cust => cust.Id == id);
             if (editCustomer is null)
                 return HttpNotFound();
-            return View("Index", editCustomer);
+            var viewEditCustomer = new RandomMovieViewModel
+            {
+                customerInfo = editCustomer
+            };
+            return View("Index", viewEditCustomer);
         }
     }
 }
