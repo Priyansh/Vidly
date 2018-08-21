@@ -23,9 +23,19 @@ namespace VidlyMVC.Controllers
         }
 
         [HttpPost]
-        public JsonResult CreateCustomer(Customer cust)
+        public JsonResult SaveCustomer(Customer cust)
         {
-            _CustomerContext.dbSetCustomers.Add(cust);
+            if (cust.Id == 0)
+            {
+                _CustomerContext.dbSetCustomers.Add(cust);
+            }
+            else
+            {
+                var customerInDb = _CustomerContext.dbSetCustomers.Single(c => c.Id == cust.Id);
+                customerInDb.Name = cust.Name;
+                customerInDb.Address = cust.Address;
+            }
+            
             _CustomerContext.SaveChangesAsync();
             return Json(new {Message = "Success", JsonRequestBehavior.AllowGet});
         }

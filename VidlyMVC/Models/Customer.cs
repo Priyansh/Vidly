@@ -17,7 +17,7 @@ namespace VidlyMVC.Models
         [DisplayName("Customer Name")]
         public string Name{ get; set; }
 
-        [Required]
+        //[Required]
         [DisplayName("Customer Address")]
         public string Address { get; set; }
     }

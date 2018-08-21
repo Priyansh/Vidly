@@ -32,19 +32,25 @@
 
 </div>
 <hr/>
-<form>
-    <div class="form-group">
-        @Html.LabelFor(m => m.customerInfo.Name)
-        @*@Html.TextBox("txtCustName", null, new { @class = "form-control", @PlaceHolder = "Please Enter Name" })*@
-        @Html.TextBoxFor(m => m.customerInfo.Name, new { @class = "form-control", @PlaceHolder = "Please Enter Name" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.customerInfo.Address)
-        @*@Html.TextBox("txtCustAddress", null, new { @class = "form-control", @PlaceHolder = "Please Enter Address" })*@
-        @Html.TextBoxFor(m => m.customerInfo.Address, null, new { @class = "form-control", @PlaceHolder = "Please Enter Address" })
-    </div>
-    <button id="btnSave" class="btn btn-primary">Save</button>
-</form>
+@using (Html.BeginForm("SaveCustomer", "Customers"))
+{
+    @*<form>*@
+        <div class="form-group">
+            @Html.LabelFor(m => m.customerInfo.Name)
+            @*@Html.TextBox("txtCustName", null, new { @class = "form-control", @PlaceHolder = "Please Enter Name" })*@
+            @Html.TextBoxFor(m => m.customerInfo.Name, new { @class = "form-control", @PlaceHolder = "Please Enter Name" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.customerInfo.Address)
+            @*@Html.TextBox("txtCustAddress", null, new { @class = "form-control", @PlaceHolder = "Please Enter Address" })*@
+            @Html.TextBoxFor(m => m.customerInfo.Address, new { @class = "form-control", @PlaceHolder = "Please Enter Address" })
+        </div>
+        @Html.TextBoxFor(m => m.customerInfo.Id, new { @class = "hidden" })
+        @Html.HiddenFor(m => m.customerInfo.Id); //Hidden Id for getting selected record to update
+        <button id="btnSave" class="btn btn-primary">Save</button>
+    @*</form>*@
+}
+
 <hr/>
 @*<table id="tblCustomers" class="table table-bordered table-striped table-hover table-responsive">
     <thead>
@@ -67,12 +73,13 @@
             $("#btnSave").click(function() {
                 //make customer data
                 var cust = {};
+                cust.Id = $("#customerInfo_Id").val();
                 cust.Name = $("#customerInfo_Name").val();
                 cust.Address = $("#customerInfo_Address").val();
                 //ajax call
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("CreateCustomer")',
+                    url: '@Url.Action("SaveCustomer")',
                     data: '{cust: ' + JSON.stringify(cust) + '}',
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",  
