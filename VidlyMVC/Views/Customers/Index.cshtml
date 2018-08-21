@@ -99,7 +99,7 @@
                 data: { Id: '' },
                 success: function(data) {
                     $.each(data, function (i, item) {
-                        var url = '@Url.Action("Details","Customers", new { id = 1}, null)';
+                        var url = '@Url.Action("Edit","Customers", new { id = 1}, null)';
                         url = url.replace("1", item.Id);
                         var rows = "<tr>"
                             + "<td>" + "<a href='"+ url + "'>"+item.Name+"</a>" + "</td>"

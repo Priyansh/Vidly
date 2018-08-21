@@ -45,12 +45,14 @@ namespace VidlyMVC.Controllers
             {
                 //lstCustomers = this.lstCustomers,
                 lstCustomers = _CustomerContext.dbSetCustomers.ToList(),
-                customerInfo = new Customer { Name = lstCustomers[0].Name, Address = lstCustomers[0].Address}
+                //customerInfo = new Customer { Name = lstCustomers[0].Name, Address = lstCustomers[0].Address}
             };
             
 
             return View(viewCustomers);
         }
+
+        
 
         //[Route("customers/details/{id}")]
         public ActionResult Details(int? id)
@@ -60,6 +62,14 @@ namespace VidlyMVC.Controllers
                 return HttpNotFound();
             return View(lstCustomerById);
 
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var editCustomer = _CustomerContext.dbSetCustomers.SingleOrDefault(cust => cust.Id == id);
+            if (editCustomer is null)
+                return HttpNotFound();
+            return View("Index", editCustomer);
         }
     }
 }
