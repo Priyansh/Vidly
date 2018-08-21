@@ -40,12 +40,14 @@ namespace VidlyMVC.Controllers
         //[Route("customers")]
         public ActionResult Index()
         {
-            
+
             var viewCustomers = new RandomMovieViewModel
             {
-                lstCustomers = this.lstCustomers,
+                //lstCustomers = this.lstCustomers,
+                lstCustomers = _CustomerContext.dbSetCustomers.ToList(),
                 customerInfo = new Customer { Name = lstCustomers[0].Name, Address = lstCustomers[0].Address}
             };
+            
 
             return View(viewCustomers);
         }
@@ -53,7 +55,7 @@ namespace VidlyMVC.Controllers
         //[Route("customers/details/{id}")]
         public ActionResult Details(int? id)
         {
-            var lstCustomerById = lstCustomers.SingleOrDefault(cust => cust.Id == id); //Return Single Customer
+            var lstCustomerById = _CustomerContext.dbSetCustomers.SingleOrDefault(cust => cust.Id == id); //Return Single Customer
             if (lstCustomerById is null)
                 return HttpNotFound();
             return View(lstCustomerById);
